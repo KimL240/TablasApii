@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
+from typing import List
 from Api.database import get_session
 from Api.models.clientes import Cliente
 from Api.schemas.clientes import ClienteCreate, ClienteRead, ClienteUpdate
 
-router = APIRouter()
+router = APIRouter(prefix="/clientes", tags=["clientes"])
 
-@router.get("/", response_model=list[ClienteRead])
+@router.get("/", response_model=List[ClienteRead])
 def listar_clientes(session: Session = Depends(get_session)):
     clientes = session.exec(select(Cliente)).all()
     return clientes
@@ -36,6 +37,7 @@ def actualizar_cliente(cliente_id: int, datos: ClienteCreate, session: Session =
         setattr(cliente, campo, valor)
 
     session.commit()
+    session.refresh(cliente)
     return cliente
 
 @router.patch("/{cliente_id}", response_model=ClienteRead)
@@ -48,6 +50,7 @@ def actualizar_parcial_cliente(cliente_id: int, datos: ClienteUpdate, session: S
         setattr(cliente, campo, valor)
 
     session.commit()
+    session.refresh(cliente)
     return cliente
 
 @router.delete("/{cliente_id}")

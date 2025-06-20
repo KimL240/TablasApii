@@ -1,7 +1,7 @@
 from sqlmodel import Session , create_engine
 
-sql_name= 'Tablasapi'
-sql_url= f'sqliteñ:///{sql_name}'
+sql_name= 'Tablasapi.db'
+sql_url= f'sqlite:///{sql_name}'
 engine= create_engine(sql_url,echo=True)
 
 def get_session():

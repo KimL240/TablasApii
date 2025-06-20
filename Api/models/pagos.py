@@ -1,7 +1,8 @@
 from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional
+from typing import Optional,List,TYPE_CHECKING
 from datetime import date
-from Api.models.pedidos import Pedido
+if TYPE_CHECKING:
+    from Api.models.pedidos import Pedido
 
 class Pago(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -10,4 +11,4 @@ class Pago(SQLModel, table=True):
     metodo_pago: str
     fecha_pago: date
 
-    pedido: Optional[Pedido] = Relationship(back_populates="pagos")
+    pedido: Optional['Pedido'] = Relationship(back_populates="pagos")
